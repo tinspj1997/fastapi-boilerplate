@@ -66,3 +66,9 @@ uv add alembic
 alembic init src/db/alembic
 ```
 
+### SQLAlchemy
+
+SQLAlchemy Documentation
+
+[SQLAlchemy 2.0](https://docs.sqlalchemy.org/en/20/orm/quickstart.html)
+
