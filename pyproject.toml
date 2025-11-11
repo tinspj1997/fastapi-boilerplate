@@ -7,4 +7,5 @@ requires-python = ">=3.12"
 dependencies = [
     "alembic>=1.17.1",
     "fastapi[standard]>=0.121.1",
+    "pydantic-settings>=2.12.0",
 ]
