@@ -60,10 +60,14 @@ uv add fastapi --extra standard
 
 ```
 
-### Install Alembic
+### Install Alembic & Use Alembic
 ```
 uv add alembic
 alembic init src/db/alembic
+
+uv run alembic revision --autogenerate -m "Initial migration"
+uv run alembic upgrade head
+
 ```
 
 ### SQLAlchemy

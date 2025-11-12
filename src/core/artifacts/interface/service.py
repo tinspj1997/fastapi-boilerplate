@@ -1,8 +1,8 @@
 from abc import ABC, abstractmethod
-from src.core.artifacts.typed import ServiceName,ServiceDescription
+from src.core.artifacts.typed import ServiceName, ServiceDescription
+
 
 class IService(ABC):
-
     @property
     @abstractmethod
     def service_name(self) -> ServiceName:
