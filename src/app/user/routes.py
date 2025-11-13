@@ -12,5 +12,5 @@ user_service = UserService()
 
 @router.get("/")
 async def read_users():
-    await user_service.get_user_count()
-    return []
+    return await user_service.get_user_count()
+    

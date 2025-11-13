@@ -9,5 +9,5 @@ class UserService(IService,UserRepository):
     
     async def get_user_count(self) -> int:
         # Placeholder for actual user count retrieval logic
-        await self.fecth_user_count()
-        return 42
+        return await self.fetch_user_count()
+        
