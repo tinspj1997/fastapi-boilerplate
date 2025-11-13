@@ -20,6 +20,6 @@ def connect_db(commit=False):
                     print(f"Idle connections : {pool.checkedin()}")
                     print(f"Active connections (in use): {pool.checkedout()}")
                     print(f"Total connections: {pool.size()}")
-                    await session.close() 
+                    await session.close()    
         return wrapper
     return decorator
