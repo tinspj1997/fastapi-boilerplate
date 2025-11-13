@@ -21,8 +21,11 @@ engine = create_async_engine(
     os.getenv("ASYNC_DATABASE_URL"),
     echo=False,
     future=True,
-    pool_size=10,       # tune for your environment
-    max_overflow=20,    # tune for spiky loads
+    pool_size=10,       
+    max_overflow=20,  
+    pool_timeout=30,
+    pool_recycle=300,     # 5 minutes
+    pool_pre_ping=True,
 )
 
 # async session factory
