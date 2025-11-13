@@ -4,6 +4,7 @@ from sqlalchemy import engine_from_config
 from sqlalchemy import pool
 import os
 from dotenv import load_dotenv
+
 load_dotenv()
 
 from alembic import context
@@ -25,6 +26,7 @@ if config.config_file_name is not None:
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
 from src.db.models.base import Base  # Import your Base model
+
 target_metadata = Base.metadata
 # target_metadata = None
 
