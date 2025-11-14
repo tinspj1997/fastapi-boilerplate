@@ -52,6 +52,7 @@ uv init --python 3.12 --app
 ### Run the project
 ```
 uv run main.py
+uv run --env-file .env main.py
 ```
 
 ### Install Basic Packages
