@@ -77,3 +77,16 @@ SQLAlchemy Documentation
 
 [SQLAlchemy 2.0](https://docs.sqlalchemy.org/en/20/orm/quickstart.html)
 
+### Dockerization
+Development Environment Setup
+```
+docker compose --profile dev up --build -d
+```
+QA Environment Setup
+```
+docker compose --profile qa up --build -d
+```
+PRoduction Environment Setup
+```
+docker compose --profile prod up --build -d
+```

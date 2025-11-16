@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  dev-api:
+    build: .
+    image: backend-api:dev  # Professional image tag for dev
+    container_name: backend-api-dev-container  # Professional container name for dev
+    env_file:
+      - .env
+    ports:
+      - "8000:8000"
+    environment:
+      - ENV=dev
+      - ASYNC_DATABASE_URL=postgresql+asyncpg://tinspjoseph:root@host.docker.internal:5432/fastapi
+      - DATABASE_URL=postgresql+psycopg2://tinspjoseph:root@host.docker.internal:5432/fastapi
+    profiles:
+      - dev
+    volumes:
+      - .:/app  # Dev-only for code reloading
+
+  qa-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: backend-api:qa  # Professional image tag for QA
+    container_name: backend-api-qa-container  # Professional container name for QA
+    ports:
+      - "8000:8000"
+    environment:
+      - ENV=qa
+    profiles:
+      - qa
+
+  prod-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: backend-api:prod  # Professional image tag for prod
+    container_name: backend-api-prod-container  # Professional container name for prod
+    ports:
+      - "8000:8000"
+    environment:
+      - ENV=prod
+    profiles:
+      - prod
+    # No volumes in prod
