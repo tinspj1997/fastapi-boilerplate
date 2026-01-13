@@ -1,25 +1,75 @@
 from functools import wraps
-from src.core.config.db import engine,AsyncSessionLocal
+from inspect import iscoroutinefunction
+from loguru import logger
+from src.core.config.db import SessionLocal, engine
 
-def connect_db(commit=False):
+
+def inject_db():
+    """
+    Decorator that injects a SQLAlchemy session.
+    - Works for sync & async functions
+    - Commits automatically
+    - Rolls back on exception
+    - Closes session safely
+    """
+
     def decorator(func):
-        @wraps(func)
-        async def wrapper(*args, **kwargs):
-            async with AsyncSessionLocal() as session:
-                pool = engine.pool
+        if iscoroutinefunction(func):
+
+            @wraps(func)
+            async def async_wrapper(*args, **kwargs):
+                # Allow external session injection (tests / batch jobs)
+                if kwargs.get("session") is not None:
+                    return await func(*args, **kwargs)
+
+                session = SessionLocal()
                 try:
                     result = await func(*args, session=session, **kwargs)
-                    if commit:
-                        await session.commit()
+                    session.commit()
                     return result
                 except Exception:
-                    await session.rollback()
+                    session.rollback()
+                    logger.exception("Async DB transaction failed")
                     raise
                 finally:
-                    print("DB Closed for session:", session)
-                    print(f"Idle connections : {pool.checkedin()}")
-                    print(f"Active connections (in use): {pool.checkedout()}")
-                    print(f"Total connections: {pool.size()}")
-                    await session.close()    
-        return wrapper
+                    session.close()
+                    _log_pool_stats()
+
+            return async_wrapper
+
+        else:
+
+            @wraps(func)
+            def sync_wrapper(*args, **kwargs):
+                if kwargs.get("session") is not None:
+                    return func(*args, **kwargs)
+
+                session = SessionLocal()
+                try:
+                    result = func(*args, session=session, **kwargs)
+                    session.commit()
+                    return result
+                except Exception:
+                    session.rollback()
+                    logger.exception("Sync DB transaction failed")
+                    raise
+                finally:
+                    session.close()
+                    _log_pool_stats()
+
+            return sync_wrapper
+
     return decorator
+
+
+def _log_pool_stats():
+    """
+    Debug-only pool stats.
+    Safe to disable in production by log level.
+    """
+    pool = engine.pool
+    logger.bind(component="db_pool").debug(
+        f"checked_in={pool.checkedin()} | "
+        f"checked_out={pool.checkedout()} | "
+        f"size={pool.size()}"
+    )

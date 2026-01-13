@@ -1,36 +1,49 @@
 # app/db.py
-from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, AsyncSession
-from sqlalchemy.orm import DeclarativeBase,Mapped, mapped_column, relationship
 import os
-
-# Base for ORM models
-from sqlalchemy.orm import DeclarativeBase
-from sqlalchemy import  Text, BigInteger
 import uuid
 
+from sqlalchemy import create_engine, Text, BigInteger
+from sqlalchemy.orm import (
+    DeclarativeBase,
+    sessionmaker,
+    Mapped,
+    mapped_column,
+)
 
+# -----------------------------
+# Base for ORM models
+# -----------------------------
 class Base(DeclarativeBase):
-    id: Mapped[int] = mapped_column(BigInteger, primary_key=True, autoincrement=True)
+    id: Mapped[int] = mapped_column(
+        BigInteger, primary_key=True, autoincrement=True
+    )
     uuid: Mapped[str] = mapped_column(
         Text, unique=True, default=lambda: str(uuid.uuid4())
     )
 
 
-# Engine options suitable for production (tweak pool sizes to your infra)
-engine = create_async_engine(
-    os.getenv("ASYNC_DATABASE_URL"),
+# -----------------------------
+# Sync Engine
+# -----------------------------
+DATABASE_URL = os.getenv("DATABASE_URL")
+
+engine = create_engine(
+    DATABASE_URL,
     echo=False,
     future=True,
-    pool_size=10,       
-    max_overflow=20,  
+    pool_size=10,
+    max_overflow=20,
     pool_timeout=30,
-    pool_recycle=300,     # 5 minutes
+    pool_recycle=300,   # 5 minutes
     pool_pre_ping=True,
 )
 
-# async session factory
-AsyncSessionLocal = async_sessionmaker(
+# -----------------------------
+# Sync Session Factory
+# -----------------------------
+SessionLocal = sessionmaker(
     bind=engine,
+    autocommit=False,
+    autoflush=False,
     expire_on_commit=False,
-    class_=AsyncSession,
 )
