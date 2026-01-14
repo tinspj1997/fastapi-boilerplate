@@ -1,7 +1,7 @@
 # app/db.py
 import os
 import uuid
-
+from src.core.artifacts.constants.default import DefaultConfig
 from sqlalchemy import create_engine, Text, BigInteger
 from sqlalchemy.orm import (
     DeclarativeBase,
@@ -25,10 +25,10 @@ class Base(DeclarativeBase):
 # -----------------------------
 # Sync Engine
 # -----------------------------
-DATABASE_URL = os.getenv("DATABASE_URL")
+
 
 engine = create_engine(
-    DATABASE_URL,
+    DefaultConfig.DATABASE_URL,
     echo=False,
     future=True,
     pool_size=10,

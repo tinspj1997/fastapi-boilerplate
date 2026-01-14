@@ -2,7 +2,7 @@ from typing import List, Optional
 
 from sqlalchemy import  String
 from sqlalchemy.orm import Mapped, mapped_column
-from src.core.config.db import Base
+from .base import Base
 
 
 class User(Base):
