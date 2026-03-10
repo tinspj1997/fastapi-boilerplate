@@ -10,22 +10,6 @@ from sqlalchemy.orm import (
     mapped_column,
 )
 
-# -----------------------------
-# Base for ORM models
-# -----------------------------
-class Base(DeclarativeBase):
-    id: Mapped[int] = mapped_column(
-        BigInteger, primary_key=True, autoincrement=True
-    )
-    uuid: Mapped[str] = mapped_column(
-        Text, unique=True, default=lambda: str(uuid.uuid4())
-    )
-
-
-# -----------------------------
-# Sync Engine
-# -----------------------------
-
 
 engine = create_engine(
     DefaultConfig.DATABASE_URL,
