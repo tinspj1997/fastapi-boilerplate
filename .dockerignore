@@ -1,0 +1,65 @@
+# Version control
+.git
+.gitignore
+
+# Python
+.venv
+venv
+__pycache__
+**/__pycache__
+*.pyc
+*.pyo
+*.pyd
+*.egg-info
+.eggs
+dist
+build
+
+# UV
+.uv-cache
+uv-cache
+
+# Editors
+.vscode
+.idea
+*.swp
+*.swo
+
+# Logs & temp
+logs
+logs/
+*.log
+temp
+temp/
+tmp
+
+# Celery
+celerybeat-schedule.bak
+celerybeat-schedule.dir
+celerybeat-schedule.dat
+
+# Docs & misc
+docs
+README*
+*.md
+CHANGELOG*
+
+# Environment
+.env
+.env.*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Oracle wallet (mounted as volume at runtime)
+oracle/
+**/wallet/
+
+# Test & lint
+.pytest_cache
+.mypy_cache
+.ruff_cache
+.coverage
+htmlcov
+tests/
